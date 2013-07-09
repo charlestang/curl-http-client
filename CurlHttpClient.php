@@ -116,7 +116,7 @@ class CurlHttpClient {
         $this->_errorMsg = '';
         $this->_responseHeaderStr = '';
         $this->_responseBody = '';
-        
+
         $ret = curl_exec($this->_curl);
         if (false !== $ret) {
             $response = explode("\r\n", $ret, 2);
@@ -145,7 +145,7 @@ class CurlHttpClient {
 
         if ($this->doRequest()) {
             return $this->_responseBody;
-        } 
+        }
     }
 
     public function postRequest($url) {
@@ -233,6 +233,14 @@ class CurlHttpClient {
         $this->_queries[$key] = $value;
     }
 
+    public function getErrorCode() {
+        return $this->_errorCode;
+    }
+
+    public function getErrorMsg() {
+        return $this->_errorMsg;
+    }
+
     /**
      * Static interface, send a GET request and return the result
      * @param string $url
@@ -242,7 +250,17 @@ class CurlHttpClient {
      * @return string/false
      */
     public static function get($url, $query = array(), $cookies = array(), $header = array()) {
-        
+        $client = self::getInstance();
+        $client->setCookies($cookies);
+        $client->setQueries($query);
+        $client->setHeaders($header);
+        $ret = $client->getRequest($url);
+
+        if ($client->getErrorCode() === CURLE_OK) {
+            return $ret;
+        }
+
+        return false;
     }
 
     /**
@@ -254,7 +272,17 @@ class CurlHttpClient {
      * @return string/false
      */
     public static function post($url, $query = array(), $cookies = array(), $header = array()) {
-        
+        $client = self::getInstance();
+        $client->setCookies($cookies);
+        $client->setQueries($query);
+        $client->setHeaders($header);
+        $ret = $client->postRequest($url);
+
+        if ($client->getErrorCode() === CURLE_OK) {
+            return $ret;
+        }
+
+        return false;
     }
 
     /**
@@ -266,7 +294,12 @@ class CurlHttpClient {
      * @return array/false
      */
     public static function getJson($url, $query = array(), $cookies = array(), $header = array()) {
-        
+        $ret = self::get($url, $query, $cookies, $header);
+        if (false !== $ret) {
+            return json_decode($ret, true);
+        }
+
+        return false;
     }
 
     /**
@@ -278,7 +311,12 @@ class CurlHttpClient {
      * @return array/false
      */
     public static function postJson($url, $query = array(), $cookies = array(), $header = array()) {
-        
+        $ret = self::post($url, $query, $cookies, $header);
+        if (false !== $ret) {
+            return json_decode($ret, true);
+        }
+
+        return false;
     }
 
     /**
