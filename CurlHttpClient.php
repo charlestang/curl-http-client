@@ -233,6 +233,10 @@ class CurlHttpClient {
         $this->_queries[$key] = $value;
     }
 
+    public function setCurlOption($option, $value) {
+        curl_setopt($this->_curl, $option, $value);
+    }
+
     public function getErrorCode() {
         return $this->_errorCode;
     }
