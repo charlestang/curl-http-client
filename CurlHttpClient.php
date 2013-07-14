@@ -118,7 +118,11 @@ class CurlHttpClient {
         $this->init();
     }
 
-    public function init() {
+    /**
+     * Initialize the object, the method should be called only once
+     * @throws Exception
+     */
+    private function init() {
         $this->_options = array();
         $this->_url = '';
         $this->_headers = array();
@@ -138,6 +142,10 @@ class CurlHttpClient {
         }
     }
 
+    /**
+     * Re-create the curl resource, and initialize all the member variables
+     * @throws Exception
+     */
     public function reset() {
         if ($this->_curl != null && is_resource($this->_curl)) {
             curl_close($this->_curl);
@@ -164,8 +172,7 @@ class CurlHttpClient {
             foreach ($this->_cookies as $key => $value) {
                 $cookies .= "$key=$value; ";
             }
-            $cookies = trim($cookies, '; ');
-            curl_setopt($this->_curl, CURLOPT_COOKIE, $cookies);
+            curl_setopt($this->_curl, CURLOPT_COOKIE, trim($cookies, '; '));
         }
 
         curl_setopt($this->_curl, CURLOPT_URL, $this->_url);
