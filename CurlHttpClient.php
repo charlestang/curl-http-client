@@ -1,13 +1,53 @@
 <?php
 
+/*
+ * The MIT License (MIT)
+ *
+ * Copyright (c) 2013 Charles Tang<charlestang@foxmail.com>
+ *
+ * Permission is hereby granted, free of charge, to any person 
+ * obtaining a copy of this software and associated documentation 
+ * files (the "Software"), to deal in the Software without 
+ * restriction, including without limitation the rights to use, 
+ * copy, modify, merge, publish, distribute, sublicense, and/or 
+ * sell copies of the Software, and to permit persons to whom 
+ * the Software is furnished to do so, subject to the following 
+ * conditions:
+ *
+ * The above copyright notice and this permission notice shall 
+ * be included in all copies or substantial portions of the 
+ * Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY 
+ * KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE 
+ * WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR 
+ * PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS 
+ * OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, 
+ * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE 
+ * USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
 /**
- * This is a wrapper class of cURL extension of php
+ * This is a wrapper class of cURL extension for php
  * @author Charles Tang<charlestang@foxmail.com>
+ * @version 1.0
  */
 class CurlHttpClient {
 
+    /**
+     * @var float the version of the class. 
+     */
     public static $version = 1.0;
+
+    /**
+     * @var CurlHttpClient 
+     */
     private static $_curlHttpClient = null;
+
+    /**
+     * @var array default options should set to cURL 
+     */
     private static $_defaultOptions = array(
         CURLOPT_RETURNTRANSFER => true, //return the result
         CURLOPT_SSL_VERIFYPEER => false, //ignore SSL
@@ -44,10 +84,30 @@ class CurlHttpClient {
      * @var array the request params container 
      */
     private $_queries = array();
+
+    /**
+     * @var int the error code cURL handler returned 
+     */
     private $_errorCode = 0;
+
+    /**
+     * @var string the error message the cURL handler returned 
+     */
     private $_errorMsg = '';
+
+    /**
+     * @var string the response header of the request 
+     */
     private $_responseHeaderStr = '';
+
+    /**
+     * @var string the response body of the request 
+     */
     private $_responseBody = '';
+    
+    /**
+     * @var array the parsed result of the response header string 
+     */
     private $_responseHeader = array();
 
     /**
