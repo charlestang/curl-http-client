@@ -320,11 +320,11 @@ class CurlHttpClient {
      * @param array $header
      * @return string/false
      */
-    public static function get($url, $query = array(), $cookies = array(), $header = array()) {
+    public static function get($url, $queries = array(), $cookies = array(), $headers = array()) {
         $client = self::getInstance();
         $client->setCookies($cookies);
-        $client->setQueries($query);
-        $client->setHeaders($header);
+        $client->setQueries($queries);
+        $client->setHeaders($headers);
         $ret = $client->getRequest($url);
 
         if ($client->getErrorCode() === CURLE_OK) {

@@ -10,7 +10,7 @@ a class CurlHttpClient and a set of handy apis, which are a set of static method
 
 1. [CurlHttpClient::getInstance()](#curlhttpclientgetinstance)
 2. [CurlHttpClient::get()](#curlhttpclientget)
-3. [CurlHttpClient::getJson()](#curlhttpclientgetjosn)
+3. [CurlHttpClient::getJson()](#curlhttpclientgetjson)
 4. [CurlHttpClient::post()](#curlhttpclientpost)
 5. [CurlHttpClient::postJson()](#curlhttpclientpostjson)
 
@@ -50,31 +50,57 @@ void
 
 This function will return a CurlHttpClient object when success, or `false` on failure.
 
-[static_get]: "Simple and handy GET request"
 ### CurlHttpClient::get()
 
+Simple and handy GET request
+
 #### Arguments
+
+* $url --- request url
+* $queries --- request parameters
+* $cookies --- cookies from last request
+* $headers --- headers should include
 
 #### Return
 
+The request result will be returned in a string.
 
-[static_getJson]: "Simple and handy GET request, but the result is JSON"
+
 ### CurlHttpClient::getJson()
 
+Simple and handy GET request, but the result is JSON
+
 #### Arguments
+
+* $url --- request url
+* $queries --- request parameters
+* $cookies --- cookies from last request
+* $headers --- headers should include
 
 #### Return
 
-[static_post]: "Simple and handy POST request"
 ### CurlHttpClient::post()
 
+Simple and handy POST request
+
 #### Arguments
+
+* $url --- request url
+* $queries --- request parameters
+* $cookies --- cookies from last request
+* $headers --- headers should include
 
 #### Return
 
-[static_postJson]: "Simple and handy POST request, but the result is JSON"
 ### CurlHttpClient::postJson()
 
+Simple and handy POST request, but the result is JSON
+
 #### Arguments
+
+* $url --- request url
+* $queries --- request parameters
+* $cookies --- cookies from last request
+* $headers --- headers should include
 
 #### Return
