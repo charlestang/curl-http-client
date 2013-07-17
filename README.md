@@ -40,67 +40,82 @@ a class CurlHttpClient and a set of handy apis, which are a set of static method
 
 ### CurlHttpClient::getInstance()
 
+#### Description
+
 A singleton factory to generate a single CurlHttpClient object.
 
-#### Arguments
+#### Parameters
 
 void
 
-#### Return
+#### Return value
 
 This function will return a CurlHttpClient object when success, or `false` on failure.
 
 ### CurlHttpClient::get()
 
+#### Description
+
 Simple and handy GET request
 
-#### Arguments
+#### Parameters
 
 * $url --- request url
 * $queries --- request parameters
 * $cookies --- cookies from last request
 * $headers --- headers should include
 
-#### Return
+#### Return value
 
 The request result will be returned in a string.
 
-
 ### CurlHttpClient::getJson()
+
+#### Description
 
 Simple and handy GET request, but the result is JSON
 
-#### Arguments
+#### Parameters
 
 * $url --- request url
 * $queries --- request parameters
 * $cookies --- cookies from last request
 * $headers --- headers should include
 
-#### Return
+#### Return value
+
+The request result will be treated as JSON string and before returned, the `json_decode` function will be called.
 
 ### CurlHttpClient::post()
 
+#### Description
+
 Simple and handy POST request
 
-#### Arguments
+#### Parameters
 
 * $url --- request url
 * $queries --- request parameters
 * $cookies --- cookies from last request
 * $headers --- headers should include
 
-#### Return
+#### Return value
+
+The result string of the POST request.
 
 ### CurlHttpClient::postJson()
 
+#### Description
+
 Simple and handy POST request, but the result is JSON
 
-#### Arguments
+#### Parameters
 
 * $url --- request url
 * $queries --- request parameters
 * $cookies --- cookies from last request
 * $headers --- headers should include
 
-#### Return
+#### Return value
+
+The request result will be treated as JSON string and before returned, the `json_decode` function will be called.
