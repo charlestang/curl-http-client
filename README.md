@@ -8,7 +8,7 @@ a class CurlHttpClient and a set of handy apis, which are a set of static method
 
 ### Static functions
 
-1. [CurlHttpClient::getInstance()][static_getInstance]
+1. [CurlHttpClient::getInstance()](#curlhttpclientgetinstance)
 2. [CurlHttpClient::get()][static_get]
 3. [CurlHttpClient::getJson()][static_getJson]
 4. [CurlHttpClient::post()][static_post]
@@ -38,7 +38,6 @@ a class CurlHttpClient and a set of handy apis, which are a set of static method
 
 ## Documents
 
-[static_getInstance]: "Get the CurlHttpClient object"
 ### CurlHttpClient::getInstance()
 
 A singleton factory to generate a single CurlHttpClient object.
