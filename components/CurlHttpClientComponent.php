@@ -8,6 +8,10 @@
 class CurlHttpClientComponent extends CApplicationComponent {
 
     private $_curlHttpClient = null;
+    
+    public function __construct() {
+        $this->init();
+    }
 
     public function init() {
         parent::init();
