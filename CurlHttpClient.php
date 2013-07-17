@@ -186,7 +186,7 @@ class CurlHttpClient {
 
         $ret = curl_exec($this->_curl);
         if (false !== $ret) {
-            $response = explode("\r\n", $ret, 2);
+            $response = explode("\r\n\r\n", $ret, 2);
             $this->_responseHeaderStr = $response[0];
             $this->_responseBody = $response[1];
         } else {
