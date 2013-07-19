@@ -16,14 +16,14 @@ a class CurlHttpClient and a set of handy apis, which are a set of static method
 
 ### Properties
 
-1. $version
+1. [$version](#version)
 
 ### Methods
 
-1. [__construct()]
-2. [reset()]
-3. [getRequest()]
-4. [postRequest()]
+1. [__construct()](#__construct)
+2. [reset()](#reset)
+3. [getRequest()](#getrequest)
+4. [postRequest()](#postrequest)
 5. [setCookie()]
 6. [setCookies()]
 7. [setHeader()]
@@ -119,3 +119,55 @@ Simple and handy POST request, but the result is JSON
 #### Return value
 
 The request result will be treated as JSON string and before returned, the `json_decode` function will be called.
+
+### $version
+
+This static variable is set to the version of the class.
+
+### __construct()
+
+The constructor of the  CurlHttpClient object.
+
+#### Parameters
+
+void
+
+#### Return value
+
+void
+
+### reset()
+
+This method will reset the cURL resource and clear the last request information.
+
+#### Parameters
+
+void
+
+#### Return value
+
+void
+
+### getRequest()
+
+Send the request with HTTP GET method.
+
+#### Parameters
+
+ * $url
+ 
+#### Return value
+
+The response body of the requst.
+
+### postRequest()
+
+Send the request with HTTP POST method.
+
+#### Parameters
+
+ * $url
+
+#### Return value
+
+The response body of the requst.
