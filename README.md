@@ -24,17 +24,17 @@ a class CurlHttpClient and a set of handy apis, which are a set of static method
 2. [reset()](#reset)
 3. [getRequest()](#getrequest)
 4. [postRequest()](#postrequest)
-5. [setCookie()]
-6. [setCookies()]
-7. [setHeader()]
-8. [setHeaders()]
-9. [setQuery()]
-10. [setQueries()]
-11. [setCurlOption()]
-12. [getErrorCode()]
-13. [getErrorMsg()]
-14. [getRawHeader()]
-15. [getHeaders()]
+5. [setCookie()](#setcookie)
+6. [setCookies()](#setcookies)
+7. [setHeader()](#setheader)
+8. [setHeaders()](#setheaders)
+9. [setQuery()](#setquery)
+10. [setQueries()](#setqueries)
+11. [setCurlOption()](#setcurloption)
+12. [getErrorCode()](#geterrorcode)
+13. [getErrorMsg()](#geterrormsg)
+14. [getRawHeader()](#getrawheader)
+15. [getHeaders()](#getheaders)
 
 ## Documents
 
@@ -171,3 +171,47 @@ Send the request with HTTP POST method.
 #### Return value
 
 The response body of the requst.
+
+### setCookie()
+
+Set the request cookie.
+
+#### Parameters
+
+ * $key string
+ * $value string
+
+#### Return value
+
+void
+
+### setCookies()
+
+Set the request cookies by array or cookie string.
+
+#### Parameters
+
+ * $cookies mixed this argument could be a string like(key1=val1; key2=val2) or
+   a associative array of PHP.
+
+#### Return value
+
+void
+
+### setHeader()
+
+### setHeaders()
+
+### setQuery()
+
+### setQueries()
+
+### setCurlOption()
+
+### getErrorCode()
+
+### getErrorMsg()
+
+### getRawHeader()
+
+### getHeaders()
