@@ -200,18 +200,113 @@ void
 
 ### setHeader()
 
+Set the request header with key and value.
+
+#### Parameters
+
+ * $key string
+ * $value string
+
+#### Return value
+
+void
+
+
 ### setHeaders()
+
+Set headers with associative array.
+
+#### Parameters
+
+ * $headers array
+
+#### Return value
+
+void
 
 ### setQuery()
 
+Set the quest parameter.
+
+#### Parameters
+
+ * $key string
+ * $value string
+
+#### Return value
+
+void
+
 ### setQueries()
+
+Set multiple query parameters with query string or associative array.
+
+#### Parameters
+
+ * $queries mixed string/array
+
+#### Return value
 
 ### setCurlOption()
 
+Set the cURL option to the cURL resource handler in the object.
+
+#### Parameters
+
+ * $option int this should be the cURL predefined constant.
+ * $value mixed
+
+#### Return value
+
+void
+
 ### getErrorCode()
+
+Get the error code the cURL returned after the request.
+
+#### Parameters
+
+void
+
+#### Return value
+
+The error code of the cURL.
 
 ### getErrorMsg()
 
+Get the string error message information of cURL.
+
+#### Parameters
+
+void
+
+#### Return value
+
+The error message cURL generated.
+
 ### getRawHeader()
 
+Get the response header of the request. This is in raw, that means a single 
+string, each response header in the string is separated by "\r\n"
+
+#### Parameters
+
+void
+
+#### Return value
+
+The response header of the request.
+
 ### getHeaders()
+
+Get the header string parsed result. The header string will be parse to an 
+associative array, the header name will be the key and the header value will be 
+the value.
+
+#### Parameters
+
+void
+
+#### Return value
+
+array
