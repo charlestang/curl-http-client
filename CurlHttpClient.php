@@ -199,15 +199,14 @@ class CurlHttpClient {
 
     public function getRequest($url) {
         $this->_url = $url;
-        $queryStr = '';
+
         if (!empty($this->_queries)) {
             $queryStr = http_build_query($this->_queries);
-        }
-
-        if (strpos('?', $url) === false) {
-            $this->_url .= '?' . $queryStr;
-        } else {
-            $this->_url .= '&' . $queryStr;
+            if (strpos('?', $url) === false) {
+                $this->_url .= '?' . $queryStr;
+            } else {
+                $this->_url .= '&' . $queryStr;
+            }
         }
 
         if ($this->doRequest()) {
