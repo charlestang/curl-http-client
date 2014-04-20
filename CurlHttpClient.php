@@ -51,6 +51,7 @@ class CurlHttpClient {
     private static $_defaultOptions = array(
         CURLOPT_RETURNTRANSFER => true, //return the result
         CURLOPT_SSL_VERIFYPEER => false, //ignore SSL
+        CURLOPT_CONNECTTIMEOUT => 1, //connect timeout, default 1s
         CURLOPT_TIMEOUT        => 8, //default timeout 
         CURLOPT_USERAGENT      => 'Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1) Gecko/20100101 Firefox/22.0',
     );
@@ -197,6 +198,11 @@ class CurlHttpClient {
         return $this->_errorCode === 0;
     }
 
+    /**
+     * Send the request use HTTP GET method
+     * @param string $url
+     * @return string
+     */
     public function getRequest($url) {
         $this->_url = $url;
 
@@ -277,6 +283,9 @@ class CurlHttpClient {
     }
 
     /**
+     * Set the query parameters by array. 
+     * The key of the array will be the parameter name
+     * and the value of it will be the query value
      * @param mixed $queries query string or array 
      */
     public function setQueries($queries) {
@@ -295,10 +304,22 @@ class CurlHttpClient {
         }
     }
 
+    /**
+     * Set the query parameter of the request,
+     * both GET and POST 
+     * @param string $key
+     * @param string $value
+     */
     public function setQuery($key, $value) {
         $this->_queries[$key] = $value;
     }
 
+    /**
+     * Set the cURL option
+     * @param int $option this should be the constant pre-defined by
+     *                    the cURL extension
+     * @param mixed $value the value of the option you want to set 
+     */
     public function setCurlOption($option, $value) {
         curl_setopt($this->_curl, $option, $value);
     }
@@ -314,7 +335,7 @@ class CurlHttpClient {
     /**
      * Static interface, send a GET request and return the result
      * @param string $url
-     * @param array $query
+     * @param array $queries
      * @param array $cookies
      * @param array $header
      * @return string/false
@@ -336,15 +357,15 @@ class CurlHttpClient {
     /**
      * Static interface, send a POST request and return the result
      * @param string $url
-     * @param array $query
+     * @param array $queries
      * @param array $cookies
      * @param array $header
      * @return string/false
      */
-    public static function post($url, $query = array(), $cookies = array(), $header = array()) {
+    public static function post($url, $queries = array(), $cookies = array(), $header = array()) {
         $client = self::getInstance();
         $client->setCookies($cookies);
-        $client->setQueries($query);
+        $client->setQueries($queries);
         $client->setHeaders($header);
         $ret = $client->postRequest($url);
 
@@ -358,13 +379,13 @@ class CurlHttpClient {
     /**
      * Static interface, send a GET request and return the result
      * @param string $url
-     * @param array $query
+     * @param array $queries
      * @param array $cookies
      * @param array $header
      * @return array/false
      */
-    public static function getJson($url, $query = array(), $cookies = array(), $header = array()) {
-        $ret = self::get($url, $query, $cookies, $header);
+    public static function getJson($url, $queries = array(), $cookies = array(), $header = array()) {
+        $ret = self::get($url, $queries, $cookies, $header);
         if (false !== $ret) {
             return json_decode($ret, true);
         }
@@ -375,13 +396,13 @@ class CurlHttpClient {
     /**
      * Static interface, send a POST request and return the result
      * @param string $url
-     * @param array $query
+     * @param array $queries
      * @param array $cookies
      * @param array $header
      * @return array/false
      */
-    public static function postJson($url, $query = array(), $cookies = array(), $header = array()) {
-        $ret = self::post($url, $query, $cookies, $header);
+    public static function postJson($url, $queries = array(), $cookies = array(), $header = array()) {
+        $ret = self::post($url, $queries, $cookies, $header);
         if (false !== $ret) {
             return json_decode($ret, true);
         }
