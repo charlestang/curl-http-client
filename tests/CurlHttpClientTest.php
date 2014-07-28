@@ -8,41 +8,42 @@ require $dir . '/../CurlHttpClient.php';
  */
 class CurlHttpClientTest extends PHPUnit_Framework_TestCase {
 
-    public $curlHttpClient = null;
-
     /**
      * Test if the curl http client can be create normally.
      */
     public function testInit() {
-        $this->curlHttpClient = new CurlHttpClient();
-        $this->assertNotNull($this->curlHttpClient, 'Initialize failed!');
-        $this->assertAttributeInternalType('resource', '_curl', $this->curlHttpClient, 'The curl client is not initialized correctly.');
+        $curlHttpClient = new CurlHttpClient();
+        $this->assertNotNull($curlHttpClient, 'Initialize failed!');
+        $this->assertAttributeInternalType('resource', '_curl', $curlHttpClient, 'The curl client is not initialized correctly.');
+        return $curlHttpClient;
     }
 
     /**
      * Test the setCookie method
      * @depends testInit
      */
-    public function testSetCookie() {
-        $this->assertAttributeEmpty('_cookies', $this->curlHttpClient);
-        $this->curlHttpClient->setCookie('key', 'value');
-        $this->assertAttributeEquals(array('key' => 'value'), '_cookies', $this->curlHttpClient);
+    public function testSetCookie($curlHttpClient) {
+        $this->assertAttributeEmpty('_cookies', $curlHttpClient);
+        $curlHttpClient->setCookie('key', 'value');
+        $this->assertAttributeEquals(array('key' => 'value'), '_cookies', $curlHttpClient);
+        return $curlHttpClient;
     }
 
     /**
      * @depends testSetCookie
      */
-    public function testClearCookies() {
-        $this->assertAttributeNotEmpty('_cookies', $this->curlHttpClient);
-        $this->curlHttpClient->clearCookies();
-        $this->assertAttributeEmpty('_cookies', $this->curlHttpClient); 
+    public function testClearCookies($curlHttpClient) {
+        $this->assertAttributeNotEmpty('_cookies', $curlHttpClient);
+        $curlHttpClient->clearCookies();
+        $this->assertAttributeEmpty('_cookies', $curlHttpClient); 
+        return $curlHttpClient;
     }
 
     /**
-     * @depends testClearCookies
+     * @depends testInit 
      */
-    public function testSetCookies() {
-        $this->curlHttpClient->setCookies('key1=value1; key2=value2');
-        $this->assertAttributeEquals(array('key1'=>'value1', 'key2'=>'value2'), '_cookies', $this->curlHttpClient);
+    public function testSetCookies($curlHttpClient) {
+        $curlHttpClient->setCookies('key1=value1; key2=value2');
+        $this->assertAttributeEquals(array('key1'=>'value1', 'key2'=>'value2'), '_cookies', $curlHttpClient);
     }
 }
