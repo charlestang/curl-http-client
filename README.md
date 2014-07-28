@@ -1,5 +1,6 @@
 # curl-http-client
 
+![Travis CI Status](https://travis-ci.org/charlestang/curl-http-client.svg?branch=master "Status Picture")
 
 CurlHttpClient is a object oriented wrapper of PHP cURL extension. It includes
 a class CurlHttpClient and a set of handy apis, which are a set of static methods included in the class. Besides, a Yii framework component wrapper is provided with it.
