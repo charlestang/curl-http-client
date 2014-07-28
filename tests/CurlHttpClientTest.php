@@ -46,4 +46,15 @@ class CurlHttpClientTest extends PHPUnit_Framework_TestCase {
         $curlHttpClient->setCookies('key1=value1; key2=value2');
         $this->assertAttributeEquals(array('key1'=>'value1', 'key2'=>'value2'), '_cookies', $curlHttpClient);
     }
+
+    /**
+     * @param CurlHttpClient $curlHttpClient
+     * @depends testInit 
+     */
+    public function testSetQueries($curlHttpClient) {
+        $this->assertAttributeEmpty('_queries', $curlHttpClient);
+        $curlHttpClient->setQueries(array('a' => 'b', 'c' => 'd'));
+        $curlHttpClient->setQueries('key1=value1&key2=value2');
+        $this->assertAttributeEquals(array('a'=>'b', 'c'=>'d', 'key1'=>'value1', 'key2'=>'value2'), '_queries', $curlHttpClient);
+    }
 }
