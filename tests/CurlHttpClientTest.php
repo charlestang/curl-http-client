@@ -28,4 +28,21 @@ class CurlHttpClientTest extends PHPUnit_Framework_TestCase {
         $this->curlHttpClient->setCookie('key', 'value');
         $this->assertAttributeEquals(array('key' => 'value'), '_cookies', $this->curlHttpClient);
     }
+
+    /**
+     * @depends testSetCookie
+     */
+    public function testClearCookies() {
+        $this->assertAttributeNotEmpty('_cookies', $this->curlHttpClient);
+        $this->curlHttpClient->clearCookies();
+        $this->assertAttributeEmpty('_cookies', $this->curlHttpClient); 
+    }
+
+    /**
+     * @depends testClearCookies
+     */
+    public function testSetCookies() {
+        $this->curlHttpClient->setCookies('key1=value1; key2=value2');
+        $this->assertAttributeEquals(array('key1'=>'value1', 'key2'=>'value2'), '_cookies', $this->curlHttpClient);
+    }
 }

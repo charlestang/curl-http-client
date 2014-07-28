@@ -261,6 +261,14 @@ class CurlHttpClient {
     }
 
     /**
+     * Clear all the cookies
+     * @return void
+     */
+    public function clearCookies() {
+        $this->_cookies = array();
+    }
+
+    /**
      * Set multiple header entries
      * @param array $headers the header info array, like array('Content-type' => 'text/plain', 'Content-length' => 100)
      */
