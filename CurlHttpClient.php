@@ -36,11 +36,6 @@
 class CurlHttpClient {
 
     /**
-     * @var float the version of the class. 
-     */
-    public static $version = 1.0;
-
-    /**
      * @var CurlHttpClient 
      */
     private static $_curlHttpClient = null;
@@ -52,7 +47,7 @@ class CurlHttpClient {
         CURLOPT_RETURNTRANSFER => true, //return the result
         CURLOPT_SSL_VERIFYPEER => false, //ignore SSL
         CURLOPT_CONNECTTIMEOUT => 1, //connect timeout, default 1s
-        CURLOPT_TIMEOUT        => 8, //default timeout 
+        CURLOPT_TIMEOUT        => 8, //request timeout, default 8s
         CURLOPT_USERAGENT      => 'Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1) Gecko/20100101 Firefox/22.0',
     );
 
@@ -67,7 +62,7 @@ class CurlHttpClient {
     private $_options = array();
 
     /**
-     * @var string the request uri 
+     * @var string the request url
      */
     private $_url = '';
 
@@ -155,6 +150,10 @@ class CurlHttpClient {
         $this->init();
     }
 
+    /**
+     * The real request sent out in this method
+     * @return boolean
+     */
     protected function doRequest() {
         curl_setopt_array($this->_curl, $this->_options);
 
