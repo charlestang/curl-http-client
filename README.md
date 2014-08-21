@@ -34,8 +34,9 @@ a class CurlHttpClient and a set of handy apis, which are a set of static method
 11. [setCurlOption()](#setcurloption)
 12. [getErrorCode()](#geterrorcode)
 13. [getErrorMsg()](#geterrormsg)
-14. [getRawHeader()](#getrawheader)
-15. [getHeaders()](#getheaders)
+14. [getRawResponseHeader()](#getrawresponseheader)
+15. [getResponseHeaders()](#getresponseheaders)
+16. [getResponseBody()](#getresponsebody)
 
 ## Documents
 
@@ -285,7 +286,7 @@ void
 
 The error message cURL generated.
 
-### getRawHeader()
+### getRawResponseHeader()
 
 Get the response header of the request. This is in raw, that means a single 
 string, each response header in the string is separated by "\r\n"
@@ -298,7 +299,7 @@ void
 
 The response header of the request.
 
-### getHeaders()
+### getResponseHeaders()
 
 Get the header string parsed result. The header string will be parse to an 
 associative array, the header name will be the key and the header value will be 
@@ -311,3 +312,13 @@ void
 #### Return value
 
 array
+
+### getResponseBody()
+
+#### Parameters
+
+void
+
+#### Return value
+
+string
