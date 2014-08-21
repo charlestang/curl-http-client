@@ -46,7 +46,7 @@ class CurlHttpClient {
     private static $_defaultOptions = array(
         CURLOPT_RETURNTRANSFER       => TRUE, //return the result
         CURLOPT_SSL_VERIFYPEER       => FALSE, //ignore SSL
-        CURLOPT_CONNECTTIMEOUT       => 2, //connect timeout, default 1s
+        CURLOPT_CONNECTTIMEOUT       => 1, //connect timeout, default 1s
         CURLOPT_TIMEOUT              => 8, //request timeout, default 8s
         CURLOPT_USERAGENT            => 'Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1) Gecko/20100101 Firefox/22.0',
         CURLOPT_DNS_USE_GLOBAL_CACHE => FALSE, //this option is not thread safe
