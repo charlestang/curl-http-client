@@ -44,11 +44,14 @@ class CurlHttpClient {
      * @var array default options should set to cURL 
      */
     private static $_defaultOptions = array(
-        CURLOPT_RETURNTRANSFER => true, //return the result
-        CURLOPT_SSL_VERIFYPEER => false, //ignore SSL
-        CURLOPT_CONNECTTIMEOUT => 1, //connect timeout, default 1s
-        CURLOPT_TIMEOUT        => 8, //request timeout, default 8s
-        CURLOPT_USERAGENT      => 'Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1) Gecko/20100101 Firefox/22.0',
+        CURLOPT_RETURNTRANSFER       => TRUE, //return the result
+        CURLOPT_SSL_VERIFYPEER       => FALSE, //ignore SSL
+        CURLOPT_CONNECTTIMEOUT       => 2, //connect timeout, default 1s
+        CURLOPT_TIMEOUT              => 8, //request timeout, default 8s
+        CURLOPT_USERAGENT            => 'Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1) Gecko/20100101 Firefox/22.0',
+        CURLOPT_DNS_USE_GLOBAL_CACHE => FALSE, //this option is not thread safe
+        //ipv6 will cause some trouble in 64bit server, so use ipv4 as default
+        CURLOPT_IPRESOLVE            => CURL_IPRESOLVE_V4,
     );
 
     /**
@@ -100,7 +103,7 @@ class CurlHttpClient {
      * @var string the response body of the request 
      */
     private $_responseBody = '';
-    
+
     /**
      * @var array the parsed result of the response header string 
      */
@@ -118,17 +121,8 @@ class CurlHttpClient {
      * Initialize the object, the method should be called only once
      * @throws Exception
      */
-    private function init() {
-        $this->_options = array();
-        $this->_url = '';
-        $this->_headers = array();
-        $this->_cookies = array();
-        $this->_queries = array();
-        $this->_errorCode = 0;
-        $this->_errorMsg = '';
-        $this->_responseHeaderStr = '';
-        $this->_responseBody = '';
-        $this->_responseHeader = array();
+    protected function init() {
+        $this->free();
         $this->_curl = curl_init();
         if ($this->_curl === false) {
             throw new Exception("cURL init failed.");
@@ -139,14 +133,31 @@ class CurlHttpClient {
     }
 
     /**
+     * Free all the resources used by this object
+     */
+    protected function free() {
+        $this->_options = array();
+        $this->_url = '';
+        $this->_headers = array();
+        $this->_cookies = array();
+        $this->_queries = array();
+        $this->_errorCode = 0;
+        $this->_errorMsg = '';
+        $this->_responseHeaderStr = '';
+        $this->_responseBody = '';
+        $this->_responseHeader = array();
+        if (is_resource($this->_curl) && get_resource_type($this->_curl) == 'curl') {
+            curl_close($this->_curl);
+        }
+        $this->_curl = null;
+    }
+
+    /**
      * Re-create the curl resource, and initialize all the member variables
      * @throws Exception
      */
     public function reset() {
-        if ($this->_curl != null && is_resource($this->_curl)) {
-            curl_close($this->_curl);
-        }
-        $this->_curl = null;
+        $this->free();
         $this->init();
     }
 
@@ -156,6 +167,8 @@ class CurlHttpClient {
      */
     protected function doRequest() {
         curl_setopt_array($this->_curl, $this->_options);
+
+        $withoutBody = array_key_exists(CURLOPT_NOBODY, $this->_options) && $this->_options[CURLOPT_NOBODY] == true;
 
         //set headers information
         if (!empty($this->_headers)) {
@@ -200,7 +213,7 @@ class CurlHttpClient {
     /**
      * Send the request use HTTP GET method
      * @param string $url
-     * @return string
+     * @return string/bool
      */
     public function getRequest($url) {
         $this->_url = $url;
@@ -214,11 +227,14 @@ class CurlHttpClient {
             }
         }
 
-        if ($this->doRequest()) {
-            return $this->_responseBody;
-        }
+        return $this->doRequest() ? $this->_responseBody : false;
     }
 
+    /**
+     * Sent the request use HTTP POST method
+     * @param string $url
+     * @return string/bool
+     */
     public function postRequest($url) {
         $this->_url = $url;
         curl_setopt($this->_curl, CURLOPT_POST, true);
@@ -226,9 +242,7 @@ class CurlHttpClient {
             curl_setopt($this->_curl, CURLOPT_POSTFIELDS, $this->_queries);
         }
 
-        if ($this->doRequest()) {
-            return $this->_responseBody;
-        }
+        return $this->doRequest() ? $this->_responseBody : false;
     }
 
     /**
@@ -331,20 +345,12 @@ class CurlHttpClient {
         curl_setopt($this->_curl, $option, $value);
     }
 
-    public function getErrorCode() {
-        return $this->_errorCode;
-    }
-
-    public function getErrorMsg() {
-        return $this->_errorMsg;
-    }
-
     /**
      * Static interface, send a GET request and return the result
      * @param string $url
      * @param array $queries
      * @param array $cookies
-     * @param array $header
+     * @param array $headers
      * @return string/false
      */
     public static function get($url, $queries = array(), $cookies = array(), $headers = array()) {
@@ -366,14 +372,14 @@ class CurlHttpClient {
      * @param string $url
      * @param array $queries
      * @param array $cookies
-     * @param array $header
+     * @param array $headers
      * @return string/false
      */
-    public static function post($url, $queries = array(), $cookies = array(), $header = array()) {
+    public static function post($url, $queries = array(), $cookies = array(), $headers = array()) {
         $client = self::getInstance();
         $client->setCookies($cookies);
         $client->setQueries($queries);
-        $client->setHeaders($header);
+        $client->setHeaders($headers);
         $ret = $client->postRequest($url);
 
         if ($client->getErrorCode() === CURLE_OK) {
@@ -388,11 +394,11 @@ class CurlHttpClient {
      * @param string $url
      * @param array $queries
      * @param array $cookies
-     * @param array $header
+     * @param array $headers
      * @return array/false
      */
-    public static function getJson($url, $queries = array(), $cookies = array(), $header = array()) {
-        $ret = self::get($url, $queries, $cookies, $header);
+    public static function getJson($url, $queries = array(), $cookies = array(), $headers = array()) {
+        $ret = self::get($url, $queries, $cookies, $headers);
         if (false !== $ret) {
             return json_decode($ret, true);
         }
@@ -405,11 +411,11 @@ class CurlHttpClient {
      * @param string $url
      * @param array $queries
      * @param array $cookies
-     * @param array $header
+     * @param array $headers
      * @return array/false
      */
-    public static function postJson($url, $queries = array(), $cookies = array(), $header = array()) {
-        $ret = self::post($url, $queries, $cookies, $header);
+    public static function postJson($url, $queries = array(), $cookies = array(), $headers = array()) {
+        $ret = self::post($url, $queries, $cookies, $headers);
         if (false !== $ret) {
             return json_decode($ret, true);
         }
@@ -431,6 +437,38 @@ class CurlHttpClient {
         }
 
         return self::$_curlHttpClient;
+    }
+
+    /**
+     * Get the response body of http request
+     * @return string
+     */
+    public function getResponseBody() {
+        return $this->_responseBody;
+    }
+
+    /**
+     * Get the response header of the http request
+     * @return string
+     */
+    public function getRawResponseHeader() {
+        return $this->_responseHeaderStr;
+    }
+
+    /**
+     * The error code of the curl
+     * @return int
+     */
+    public function getErrorCode() {
+        return $this->_errorCode;
+    }
+
+    /**
+     * The error msg of the curl
+     * @return string
+     */
+    public function getErrorMsg() {
+        return $this->_errorMsg;
     }
 
 }

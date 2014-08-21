@@ -57,4 +57,13 @@ class CurlHttpClientTest extends PHPUnit_Framework_TestCase {
         $curlHttpClient->setQueries('key1=value1&key2=value2');
         $this->assertAttributeEquals(array('a'=>'b', 'c'=>'d', 'key1'=>'value1', 'key2'=>'value2'), '_queries', $curlHttpClient);
     }
+
+    /**
+     * @param CurlHttpClient $curlHttpClient
+     * @depends testInit
+     */
+    public function testGetRequest($curlHttpClient) {
+        $curlHttpClient->getRequest("http://www.qq.com");
+        $this->assertEquals(0, $curlHttpClient->getErrorCode());
+    }
 }
