@@ -67,6 +67,6 @@ class CurlHttpClientTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals(0, $curlHttpClient->getErrorCode());
         $responseHeaders = $curlHttpClient->getResponseHeaders();
         $this->assertEquals(200, $responseHeaders['HTTP_STATUS']);
-        $this->assertEquals('UTF-8', $responseHeaders['CHARSET']);
+        $this->assertEquals('GB2312', $responseHeaders['CHARSET']);
     }
 }
