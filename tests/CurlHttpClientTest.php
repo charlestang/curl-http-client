@@ -65,5 +65,8 @@ class CurlHttpClientTest extends PHPUnit_Framework_TestCase {
     public function testGetRequest($curlHttpClient) {
         $curlHttpClient->getRequest("http://www.qq.com");
         $this->assertEquals(0, $curlHttpClient->getErrorCode());
+        $responseHeaders = $curlHttpClient->getResponseHeaders();
+        $this->assertEquals(200, $responseHeaders['HTTP_STATUS']);
+        $this->assertEquals('UTF-8', $responseHeaders['CHARSET']);
     }
 }

@@ -107,7 +107,7 @@ class CurlHttpClient {
     /**
      * @var array the parsed result of the response header string 
      */
-    private $_responseHeader = array();
+    private $_responseHeaders = array();
 
     /**
      * Constructor
@@ -145,7 +145,7 @@ class CurlHttpClient {
         $this->_errorMsg = '';
         $this->_responseHeaderStr = '';
         $this->_responseBody = '';
-        $this->_responseHeader = array();
+        $this->_responseHeaders = array();
         if (is_resource($this->_curl) && get_resource_type($this->_curl) == 'curl') {
             curl_close($this->_curl);
         }
@@ -453,6 +453,52 @@ class CurlHttpClient {
      */
     public function getRawResponseHeader() {
         return $this->_responseHeaderStr;
+    }
+
+    /**
+     * Get the response headers of the http request
+     * @return array
+     */
+    public function getResponseHeaders() {
+        if ($this->_responseHeaderStr == '') {
+            return array();
+        }
+        if (empty($this->_responseHeaders)) {
+            $this->parseResponseString();
+        }
+        return $this->_responseHeaders;
+    }
+
+    protected function parseResponseString() {
+        $lines = explode("\n", $this->_responseHeaderStr);
+        foreach ($lines as $l) {
+            $l = trim($l);
+            if (empty($l)) {
+                continue;
+            }
+            if (strpos($l, ": ")) {
+                $pairs = explode(": ", $l, 2);
+                $this->_responseHeaders[$pairs[0]] = trim($pairs[1]);
+            } else {
+                $matches = array();
+                if (preg_match('/^HTTP\/(\d\.\d)\s+(\d+)\s+(\w+)/i', $l, $matches)) {
+                    $this->_responseHeaders['HTTP_VERSION'] = $matches[1];
+                    $this->_responseHeaders['HTTP_STATUS'] = $matches[2];
+                    $this->_responseHeaders['HTTP_ERROR'] = $matches[3];
+                }
+            }
+        }
+
+        if (isset($this->_responseHeaders['Content-Type'])) {
+            $contentInfo = explode('; ', $this->_responseHeaders['Content-Type']);
+            $this->_responseHeaders['MIME_TYPE'] = trim($contentInfo[0]);
+            foreach ($contentInfo as $info) {
+                if (strpos($info, 'charset') !== false) {
+                    $charInfo = explode('=', $info);
+                    $this->_responseHeaders['CHARSET'] = strtoupper(trim($charInfo[1]));
+                }
+            }
+        }
     }
 
     /**

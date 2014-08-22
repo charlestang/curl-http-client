@@ -15,8 +15,9 @@ var_dump($page);
 
 $curlHttpClient = CurlHttpClient::getInstance();
 //$curlHttpClient->setCurlOption(CURLOPT_NOBODY, TRUE);
-$ret = $curlHttpClient->getRequest('http://www.qq.com');
+$ret = $curlHttpClient->getRequest('http://www.baidu.com');
 var_dump($curlHttpClient->getRawResponseHeader());
+var_dump($curlHttpClient->getResponseHeaders());
 //var_dump($curlHttpClient->getResponseBody());
 
 if ($curlHttpClient->getErrorCode() == CURLE_OK) {
