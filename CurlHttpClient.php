@@ -500,7 +500,7 @@ class CurlHttpClient {
             }
         }
     }
-
+//<editor-fold defaultstate="collapsed" desc="Getter">
     /**
      * The error code of the curl
      * @return int
@@ -516,5 +516,5 @@ class CurlHttpClient {
     public function getErrorMsg() {
         return $this->_errorMsg;
     }
-
+//</editor-fold>
 }
